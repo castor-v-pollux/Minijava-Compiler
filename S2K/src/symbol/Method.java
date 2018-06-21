@@ -245,7 +245,7 @@ public class Method {
 		// 1.params more than 4
 		// 2.callee-saved S
 		// 3.spilled regs
-		int stackId = Math.max(param - 4, 0) + maxS;
+		int stackId = Math.max(param - 4, 0) + (maxS + 1);
 		for (Integer tempId : regSpilled.keySet())
 			regSpilled.put(tempId, "SPILLEDARG " + stackId++);
 		stack = stackId;
@@ -299,7 +299,7 @@ public class Method {
 	 */
 	public void storeReg() {
 		int stackId = Math.max(param - 4, 0);
-		for (int i = 0; i < maxS; i++)
+		for (int i = 0; i <= maxS; i++)
 			System.out.println(String.format("\tASTORE SPILLEDARG %d s%d", i + stackId, i));
 	}
 
@@ -308,7 +308,7 @@ public class Method {
 	 */
 	public void restoreReg() {
 		int stackId = Math.max(param - 4, 0);
-		for (int i = 0; i < maxS; i++)
+		for (int i = 0; i <= maxS; i++)
 			System.out.println(String.format("\tALOAD s%d SPILLEDARG %d", i, i + stackId));
 	}
 
