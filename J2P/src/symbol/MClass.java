@@ -34,6 +34,8 @@ public class MClass extends MIdentifier implements MType {
 	private HashMap<String, MVar> fields = new HashMap<>();
 	private ArrayList<MVar> fieldList = new ArrayList<>();
 
+	private int fieldCnt;
+
 	/**
 	 * 类的方法列表
 	 */
@@ -91,12 +93,13 @@ public class MClass extends MIdentifier implements MType {
 		if (superClass == null) {
 			for (MVar field : fieldList)
 				fields.put(field.getName(), field);
+			fieldCnt = fieldList.size();
 			for (MMethod method : methodList)
 				methods.put(method.getName(), method);
 			return;
 		}
 		fields = (HashMap<String, MVar>) superClass.fields.clone();
-		int fieldCnt = fields.size();
+		fieldCnt = fields.size();
 		for (MVar field : fieldList) {
 			field.setId(++fieldCnt);
 			fields.put(field.getName(), field);
@@ -141,7 +144,7 @@ public class MClass extends MIdentifier implements MType {
 		} else
 			stmtList.add(new PMoveStmt(dTable, new PInteger(0)));
 		// Initialize vTable
-		l = fields.size();
+		l = fieldCnt;
 		stmtList.add(new PMoveStmt(vTable, new PAllocate(new PInteger(4 + l * 4))));
 		if (l > 0) {
 			PTemp loop = PTemp.newTemp();
